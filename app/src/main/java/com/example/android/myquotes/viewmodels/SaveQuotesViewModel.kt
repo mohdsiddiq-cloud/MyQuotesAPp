@@ -2,21 +2,19 @@ package com.example.android.myquotes.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.android.myquotes.repository.QuoteRepository
 import androidx.lifecycle.viewModelScope
 import com.example.android.myquotes.models.QuoteList
+import com.example.android.myquotes.repository.QuoteRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.example.android.myquotes.models.Result
 
-
-class MainViewModel(private val repository: QuoteRepository,private val data: String) : ViewModel() {
+class SaveQuotesViewModel(private val repository: QuoteRepository): ViewModel() {
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getQuotes(data)
+            repository.getSavedQuotes()
         }
     }
-    val quotes : LiveData<QuoteList>
-    get() = repository.quotes
-
+    val saveQuotes : LiveData<List<Result>>
+        get() = repository.saveQuotes
 }

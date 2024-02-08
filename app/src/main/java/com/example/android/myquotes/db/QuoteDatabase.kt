@@ -11,7 +11,6 @@ import com.example.android.myquotes.models.Result
 abstract class QuoteDatabase : RoomDatabase() {
     abstract fun quotesDao(): QuoteDao
 
-
     companion object{
         private var INSTANCE: QuoteDatabase?=null
         fun getDatabase(context: Context) : QuoteDatabase {

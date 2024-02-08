@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,10 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.android.myquotes.QuotesActivity
 import com.example.android.myquotes.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class QuotesAdapter(var data : List<String>): Adapter<QuotesAdapter.MyViewHolder>() {
@@ -25,11 +30,15 @@ class QuotesAdapter(var data : List<String>): Adapter<QuotesAdapter.MyViewHolder
         var context=holder.itemView.context
         holder.category.text = data.get(position)
         holder.itemView.setOnClickListener {
-            val intent= Intent(context,QuotesActivity::class.java)
-            intent.putExtra("category",data.get(position))
-            context.startActivity(intent)
+            CoroutineScope(Dispatchers.Main).launch {
+                val intent= Intent(context,QuotesActivity::class.java)
+                intent.putExtra("category",data.get(position))
+                context.startActivity(intent)
+            }
+
         }
     }
+
     override fun getItemCount(): Int {
         return data.size
     }
@@ -37,4 +46,5 @@ class QuotesAdapter(var data : List<String>): Adapter<QuotesAdapter.MyViewHolder
     class MyViewHolder(itemView: View) : ViewHolder(itemView) {
         var category = itemView.findViewById<TextView>(R.id.category)
     }
+
 }
