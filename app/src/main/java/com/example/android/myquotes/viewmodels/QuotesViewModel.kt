@@ -13,10 +13,10 @@ class QuotesViewModel: ViewModel() {
         _index.value = 0
     }
     fun quotesNext() {
-        _index.value= (_index.value ?:0) +1
+        _index.value= (_index.value )?.plus(1)
     }
 
     fun quotesBack() {
-        _index.value= (_index.value ?:0) -1
+        _index.value= (_index.value )?.minus(1)
     }
 }

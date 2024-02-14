@@ -1,4 +1,4 @@
-package com.example.android.myquotes
+package com.example.android.myquotes.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.android.myquotes.QuoteApplication
+import com.example.android.myquotes.R
 import com.example.android.myquotes.models.QuoteList
 import com.example.android.myquotes.repository.QuoteRepository
 import com.example.android.myquotes.viewmodels.MainViewModel
@@ -36,7 +38,6 @@ class QuotesActivity : AppCompatActivity() {
     lateinit var repository: QuoteRepository
     lateinit var categoryData: String
     var ind=0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -33,6 +33,7 @@ class QuoteRepository(
     }
     suspend fun saveQuote(quote: Result){
         quoteDatabase.quotesDao().addQuote(quote)
+        getSavedQuotes()
     }
 
     suspend fun getSavedQuotes(){

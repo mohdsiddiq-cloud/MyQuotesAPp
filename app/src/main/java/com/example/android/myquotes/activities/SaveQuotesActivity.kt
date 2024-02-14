@@ -1,4 +1,4 @@
-package com.example.android.myquotes
+package com.example.android.myquotes.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.android.myquotes.QuoteApplication
+import com.example.android.myquotes.R
 import com.example.android.myquotes.models.Result
 import com.example.android.myquotes.repository.QuoteRepository
 import com.example.android.myquotes.viewmodels.QuotesViewModel
@@ -18,7 +20,6 @@ import com.example.android.myquotes.viewmodels.SaveQuotesViewModel
 import com.example.android.myquotes.viewmodels.SaveQuotesViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.*
-
 
 class SaveQuotesActivity : AppCompatActivity() {
     lateinit var quotesViewModel: QuotesViewModel
@@ -35,7 +36,7 @@ class SaveQuotesActivity : AppCompatActivity() {
     lateinit var currentAuthor : String
     lateinit var categoryData: String
     lateinit var temp:Result
-    var ind=0
+    var ind=-1
     lateinit var repository: QuoteRepository
     lateinit var saveQuotesViewModel:SaveQuotesViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +49,7 @@ class SaveQuotesActivity : AppCompatActivity() {
         next=findViewById<TextView>(R.id.next1)
         shareButton=findViewById<FloatingActionButton>(R.id.floatingActionButton1)
         saveButton=findViewById<FloatingActionButton>(R.id.floatingActionButtonSave1)
+
         showProgressBar()
         CoroutineScope(Dispatchers.Main).launch {
             delay(3000) // 3 seconds delay
@@ -65,6 +67,7 @@ class SaveQuotesActivity : AppCompatActivity() {
                     saveQuotesViewModel.saveQuotes
                 }
                 data = job.await()
+                ind=0;
                 withContext(Dispatchers.Main) {
                     quotesViewModel.index.observe(this@SaveQuotesActivity, Observer {
 
@@ -108,7 +111,6 @@ class SaveQuotesActivity : AppCompatActivity() {
                 Log.d("quotes-not-fetch",e.printStackTrace().toString())
             }
         }
-
 
     }
     private fun showProgressBar() {

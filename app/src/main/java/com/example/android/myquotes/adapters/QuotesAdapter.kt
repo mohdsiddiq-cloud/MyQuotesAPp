@@ -4,17 +4,13 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.android.myquotes.QuotesActivity
+import com.example.android.myquotes.activities.QuotesActivity
 import com.example.android.myquotes.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -27,15 +23,14 @@ class QuotesAdapter(var data : List<String>): Adapter<QuotesAdapter.MyViewHolder
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        var context=holder.itemView.context
-        holder.category.text = data.get(position)
+        val context=holder.itemView.context
+        holder.category.text = data[position]
         holder.itemView.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                val intent= Intent(context,QuotesActivity::class.java)
-                intent.putExtra("category",data.get(position))
+                val intent= Intent(context, QuotesActivity::class.java)
+                intent.putExtra("category", data[position])
                 context.startActivity(intent)
             }
-
         }
     }
 
@@ -44,7 +39,7 @@ class QuotesAdapter(var data : List<String>): Adapter<QuotesAdapter.MyViewHolder
     }
 
     class MyViewHolder(itemView: View) : ViewHolder(itemView) {
-        var category = itemView.findViewById<TextView>(R.id.category)
+        var category: TextView = itemView.findViewById(R.id.category)
     }
 
 }
