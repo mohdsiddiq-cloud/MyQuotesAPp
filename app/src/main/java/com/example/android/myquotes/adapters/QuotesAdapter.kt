@@ -21,7 +21,6 @@ class QuotesAdapter(var data : List<String>): Adapter<QuotesAdapter.MyViewHolder
         val view= inflater.inflate(R.layout.item_view,parent,false)
         return MyViewHolder(view)
     }
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val context=holder.itemView.context
         holder.category.text = data[position]

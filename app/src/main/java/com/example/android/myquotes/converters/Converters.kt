@@ -1,6 +1,7 @@
-package com.example.android.myquotes
+package com.example.android.myquotes.converters
 
 import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -15,5 +16,17 @@ object Converters {
     @JvmStatic
     fun fromList(list: List<String>?): String? {
         return list?.let { Gson().toJson(it) }
+    }
+
+    @TypeConverters
+    @JvmStatic
+    fun fromList1(list: List<String>?): String? {
+        var s=""
+      if (list != null) {
+        for(ind in list){
+            s=s+ind+"\n"
+        }
+      }
+      return s;
     }
 }

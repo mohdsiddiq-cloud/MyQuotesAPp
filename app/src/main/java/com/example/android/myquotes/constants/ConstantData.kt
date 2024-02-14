@@ -1,4 +1,4 @@
-package com.example.android.myquotes
+package com.example.android.myquotes.constants
 
 class ConstantData {
     val CATEGORYDATA : List<String> = listOf(

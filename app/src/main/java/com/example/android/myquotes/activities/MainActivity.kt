@@ -7,8 +7,8 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.myquotes.ConstantData
-import com.example.android.myquotes.QuoteApplication
+import com.example.android.myquotes.constants.ConstantData
+import com.example.android.myquotes.applications.QuoteApplication
 import com.example.android.myquotes.R
 import com.example.android.myquotes.adapters.QuotesAdapter
 import com.example.android.myquotes.repository.QuoteRepository
@@ -33,13 +33,9 @@ class MainActivity : AppCompatActivity() {
         saveQuotesViewModel.saveQuotes
     }
     fun onSaveQuotes(view: View) {
-
         CoroutineScope(Dispatchers.Main).launch {
-
             val intent= Intent(this@MainActivity, SaveQuotesActivity::class.java)
             startActivity(intent)
         }
     }
-
-
 }

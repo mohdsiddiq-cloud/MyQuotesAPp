@@ -8,11 +8,13 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.android.myquotes.QuoteApplication
+import com.example.android.myquotes.applications.QuoteApplication
 import com.example.android.myquotes.R
+import com.example.android.myquotes.databinding.ActivitySaveQuotesBinding
 import com.example.android.myquotes.models.Result
 import com.example.android.myquotes.repository.QuoteRepository
 import com.example.android.myquotes.viewmodels.QuotesViewModel
@@ -27,21 +29,17 @@ class SaveQuotesActivity : AppCompatActivity() {
     lateinit var shareButton: FloatingActionButton
     lateinit var saveButton: FloatingActionButton
     private lateinit var progressBar: ProgressBar
-    lateinit var quoteText : TextView
-    lateinit var quoteAuthor : TextView
-    lateinit var quoteHead   : TextView
     lateinit var prev  : TextView
     lateinit var next   : TextView
-    lateinit var currentQuote : String
-    lateinit var currentAuthor : String
-    lateinit var categoryData: String
-    lateinit var temp:Result
-    var ind=-1
+    var temp=Result(-1,"id","Author","Slug","Quotes","date","dateModified",1, listOf("No Quotes Found"))
+    var ind=0
     lateinit var repository: QuoteRepository
     lateinit var saveQuotesViewModel:SaveQuotesViewModel
+    lateinit var binding: ActivitySaveQuotesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_save_quotes)
+        binding=DataBindingUtil.setContentView(this,R.layout.activity_save_quotes)
+        binding.result=temp
         repository= (application as QuoteApplication).repository
         saveQuotesViewModel= ViewModelProvider(this, SaveQuotesViewModelFactory(repository)).get(SaveQuotesViewModel::class.java)
         progressBar= findViewById(R.id.progressBar1)
@@ -56,60 +54,19 @@ class SaveQuotesActivity : AppCompatActivity() {
             progressBar.visibility = View.INVISIBLE
             prev.visibility= View.VISIBLE
             next.visibility= View.VISIBLE
+            quotesViewModel.index.observe(this@SaveQuotesActivity, Observer {
+                ind=it
+                if(data.value?.size!=0)
+                temp= data.value?.get(it)!!
+                binding.result=temp
+            })
         }
         quotesViewModel= ViewModelProvider(this).get(QuotesViewModel::class.java)
-        quoteText= findViewById<TextView>(R.id.quoteText1)
-        quoteAuthor= findViewById<TextView>(R.id.quoteAuthor1)
-        quoteHead= findViewById<TextView>(R.id.headline1)
         CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val job = async {
-                    saveQuotesViewModel.saveQuotes
-                }
-                data = job.await()
-                ind=0;
-                withContext(Dispatchers.Main) {
-                    quotesViewModel.index.observe(this@SaveQuotesActivity, Observer {
-
-                        ind=it
-                        temp= data.value?.get(it)!!
-
-                        if(temp?.content!=null){
-                            currentQuote= temp.content.toString()
-                            quoteText.text= temp.content.toString()
-                        }
-                        else{
-                            currentQuote= ""
-                            quoteText.text="Quote"
-                        }
-                        if(temp?.author!=null){
-                            currentAuthor=temp.author.toString()
-                            quoteAuthor.text=temp.author.toString()
-                        }
-                        else{
-                            currentAuthor=""
-                            quoteAuthor.text="Author"
-                        }
-                        if(temp?.tags!=null){
-                            var count=0
-                            var txt:String =""
-                            for(item in temp.tags!!){
-                                txt= txt+ "\n" + item
-                                count++
-                                if(count>2)
-                                    break
-                            }
-                            quoteHead.text= txt
-                        }
-                        else{
-                            quoteHead.text= "No Quotes Found"
-                        }
-                    })
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Log.d("quotes-not-fetch",e.printStackTrace().toString())
+            val job=CoroutineScope(Dispatchers.IO).async {
+                printQuotes()
             }
+            job.await()
         }
 
     }
@@ -143,7 +100,7 @@ class SaveQuotesActivity : AppCompatActivity() {
     fun onShare(view: View) {
         val intent= Intent(Intent.ACTION_SEND)
         intent.setType("text/plain")
-        intent.putExtra(Intent.EXTRA_TEXT,"Quote : $currentQuote \n Author: $currentAuthor")
+        intent.putExtra(Intent.EXTRA_TEXT,"Quote : ${temp.content} \n Author: ${temp.author}")
         startActivity(intent)
     }
 

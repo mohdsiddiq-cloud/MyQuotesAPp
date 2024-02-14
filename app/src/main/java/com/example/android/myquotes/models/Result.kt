@@ -3,7 +3,7 @@ package com.example.android.myquotes.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.example.android.myquotes.Converters
+import com.example.android.myquotes.converters.Converters
 
 @Entity(tableName = "quote")
 @TypeConverters(Converters::class) // Specify the Type Converter

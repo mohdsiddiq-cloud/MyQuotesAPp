@@ -1,8 +1,6 @@
-package com.example.android.myquotes
+package com.example.android.myquotes.applications
 
 import android.app.Application
-import androidx.lifecycle.Observer
-import com.example.android.myquotes.adapters.QuotesAdapter
 import com.example.android.myquotes.api.QuoteService
 import com.example.android.myquotes.api.RetrofitHelper
 import com.example.android.myquotes.repository.QuoteRepository
