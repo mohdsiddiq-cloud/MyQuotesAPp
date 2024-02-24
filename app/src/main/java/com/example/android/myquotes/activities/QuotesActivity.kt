@@ -35,12 +35,12 @@ class QuotesActivity : AppCompatActivity() {
     lateinit var next   : TextView
     lateinit var repository: QuoteRepository
     lateinit var categoryData: String
+    lateinit var headline: TextView
     var ind=0
     var temp=Result(-1,"id","Author","Slug","Quotes","date","dateModified",1, listOf("Category"))
     lateinit var binding: ActivityQuotesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_quotes)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_quotes)
         binding.result=temp
         progressBar= findViewById(R.id.progressBar)
@@ -48,7 +48,7 @@ class QuotesActivity : AppCompatActivity() {
         next=findViewById<TextView>(R.id.next)
         shareButton=findViewById<FloatingActionButton>(R.id.floatingActionButton)
         saveButton=findViewById<FloatingActionButton>(R.id.floatingActionButtonSave)
-
+        headline= findViewById(R.id.headline)
 
         showProgressBar()
         CoroutineScope(Dispatchers.Main).launch {
@@ -65,6 +65,7 @@ class QuotesActivity : AppCompatActivity() {
         }
 
         categoryData= intent.getStringExtra("category").toString()
+        headline.text=categoryData
         repository= (application as QuoteApplication).repository
         mainViewModel= ViewModelProvider(this,
             MainViewModelFactory(repository,categoryData!!)

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.android.myquotes.api.QuoteService
 import com.example.android.myquotes.models.QuoteList
 import com.example.android.myquotes.db.QuoteDatabase
+import com.example.android.myquotes.models.MyQuotes
 import com.example.android.myquotes.utils.NetworkUtils
 import com.example.android.myquotes.models.Result
 
@@ -20,6 +21,9 @@ class QuoteRepository(
 
     val saveQuotesMutable = MutableLiveData<List<Result>>()
     val saveQuotes: LiveData<List<Result>> get() = saveQuotesMutable
+
+    val myQuotesMutable = MutableLiveData<List<MyQuotes>>()
+    val myQuotes: LiveData<List<MyQuotes>> get() = myQuotesMutable
 
 
     suspend fun getQuotes(tag: String){
@@ -41,7 +45,20 @@ class QuoteRepository(
         saveQuotesMutable.postValue(quotes)
     }
 
+    suspend fun getMyQuotes(){
+        var quotes= quoteDatabase.quotesDao().getMyQuote()
+        myQuotesMutable.postValue(quotes)
+    }
+    suspend fun deleteQuote(quote: MyQuotes){
+        quoteDatabase.quotesDao().deleteQuote(quote)
+    }
+
+
     suspend fun deleteQuote(quote: Result){
         quoteDatabase.quotesDao().deleteQuote(quote)
+    }
+    suspend fun saveQuote(quote: MyQuotes){
+        quoteDatabase.quotesDao().addQuote(quote)
+        getSavedQuotes()
     }
 }

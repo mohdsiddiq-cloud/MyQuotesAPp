@@ -38,4 +38,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    fun onAddQuotes(view: View) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val intent= Intent(this@MainActivity, AddQuotesActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    fun myQuotes(view: View) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val intent= Intent(this@MainActivity, MyQuotesActivity::class.java)
+            startActivity(intent)
+        }
+    }
 }

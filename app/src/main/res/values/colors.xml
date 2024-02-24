@@ -9,6 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#ebdd21</color>
     <color name="green">#81F011</color>
+    <color name="purple">#963484</color>
+    <color name="blue">#3066BE</color>
+    <color name="baby_pink">#DA70D6</color>
+    <color name="baby_blue">#5D3FD3</color>
+    <color name="grey">#CCCCFF</color>
     <color name="selected_icon_color">#FF0000</color> <!-- Red color -->
     <color name="not_selected_icon_color">#0000FF</color> <!-- Blue color -->
 

@@ -3,7 +3,6 @@ package com.example.android.myquotes.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -12,10 +11,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.android.myquotes.applications.QuoteApplication
 import com.example.android.myquotes.R
-import com.example.android.myquotes.databinding.ActivitySaveQuotesBinding
-import com.example.android.myquotes.models.Result
+import com.example.android.myquotes.applications.QuoteApplication
+import com.example.android.myquotes.databinding.ActivityMyQuotesBinding
+import com.example.android.myquotes.models.MyQuotes
 import com.example.android.myquotes.repository.QuoteRepository
 import com.example.android.myquotes.viewmodels.QuotesViewModel
 import com.example.android.myquotes.viewmodels.SaveQuotesViewModel
@@ -23,31 +22,30 @@ import com.example.android.myquotes.viewmodels.SaveQuotesViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.*
 
-class SaveQuotesActivity : AppCompatActivity() {
+class MyQuotesActivity : AppCompatActivity() {
     lateinit var quotesViewModel: QuotesViewModel
-    lateinit var data: LiveData<List<Result>>
+    lateinit var data: LiveData<List<MyQuotes>>
     lateinit var shareButton: FloatingActionButton
     lateinit var saveButton: FloatingActionButton
     private lateinit var progressBar: ProgressBar
     lateinit var prev  : TextView
     lateinit var next   : TextView
-    var temp=Result(-1,"id","Author","Slug","Quotes","date","dateModified",1, listOf("No Quotes Found"))
+    var temp= MyQuotes(-1,"Author","Quotes","No Quotes Found")
     var ind=0
     lateinit var repository: QuoteRepository
-    lateinit var saveQuotesViewModel:SaveQuotesViewModel
-    lateinit var binding: ActivitySaveQuotesBinding
-
+    lateinit var saveQuotesViewModel: SaveQuotesViewModel
+    lateinit var binding: ActivityMyQuotesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=DataBindingUtil.setContentView(this,R.layout.activity_save_quotes)
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_my_quotes)
         binding.result=temp
         repository= (application as QuoteApplication).repository
         saveQuotesViewModel= ViewModelProvider(this, SaveQuotesViewModelFactory(repository)).get(SaveQuotesViewModel::class.java)
-        progressBar= findViewById(R.id.progressBar1)
-        prev=findViewById<TextView>(R.id.prev1)
-        next=findViewById<TextView>(R.id.next1)
-        shareButton=findViewById<FloatingActionButton>(R.id.floatingActionButton1)
-        saveButton=findViewById<FloatingActionButton>(R.id.floatingActionButtonSave1)
+        progressBar= findViewById(R.id.progressBar2)
+        prev=findViewById<TextView>(R.id.prev2)
+        next=findViewById<TextView>(R.id.next2)
+        shareButton=findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+        saveButton=findViewById<FloatingActionButton>(R.id.floatingActionButtonSave2)
 
         showProgressBar()
         CoroutineScope(Dispatchers.Main).launch {
@@ -55,29 +53,28 @@ class SaveQuotesActivity : AppCompatActivity() {
             progressBar.visibility = View.INVISIBLE
             prev.visibility= View.VISIBLE
             next.visibility= View.VISIBLE
-            quotesViewModel.index.observe(this@SaveQuotesActivity, Observer {
+            quotesViewModel.index.observe(this@MyQuotesActivity, Observer {
                 ind=it
                 if(data.value?.size!=0)
-                temp= data.value?.get(it)!!
+                    temp= data.value?.get(it)!!
                 binding.result=temp
             })
         }
         quotesViewModel= ViewModelProvider(this).get(QuotesViewModel::class.java)
         CoroutineScope(Dispatchers.IO).launch {
-            val job=CoroutineScope(Dispatchers.IO).async {
+            val job= CoroutineScope(Dispatchers.IO).async {
                 printQuotes()
             }
             job.await()
         }
-
     }
     private fun showProgressBar() {
         progressBar.visibility = View.VISIBLE
     }
 
     suspend fun printQuotes() {
-        val job=CoroutineScope(Dispatchers.IO).async {
-            saveQuotesViewModel.saveQuotes
+        val job= CoroutineScope(Dispatchers.IO).async {
+            saveQuotesViewModel.myQuotes
         }
         data=job.await()
     }
